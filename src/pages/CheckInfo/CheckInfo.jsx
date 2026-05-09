@@ -14,7 +14,7 @@ const CheckInfo = () => {
       .get("/userInfo")
       .then((res) => setUserInfo(res.data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [axiosPublic]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +25,7 @@ const CheckInfo = () => {
       setActiveUser(found);
     } else {
       alert("Invalid Password");
+      setPassword("");
     }
   };
 
@@ -34,7 +35,6 @@ const CheckInfo = () => {
     setPassword("");
   };
 
-  // Create document list dynamically
   const documents = activeUser
     ? [
         { label: "LMI Document", path: activeUser.lmiUrl },
@@ -47,9 +47,22 @@ const CheckInfo = () => {
   return (
     <section className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="bg-white shadow-2xl rounded-3xl w-full max-w-5xl">
+
         {!activeUser ? (
           <div className="p-12 max-w-md mx-auto text-center">
-            <h1 className="text-3xl font-bold mb-6">RTS Company Limited</h1>
+
+            {/* ✅ LOGO + TITLE (FIXED) */}
+            <div className="mb-6">
+              <img
+                src="/aulogo.gif"
+                alt="RTS Company"
+                className="w-52 mx-auto mb-3 object-contain"
+              />
+
+              <h1 className="text-3xl font-bold text-slate-800 tracking-wide">
+                RTS Company Limited
+              </h1>
+            </div>
 
             <form onSubmit={handleSubmit}>
               <input
@@ -60,13 +73,14 @@ const CheckInfo = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
-              <button className="w-full bg-blue-600 text-white py-3 rounded-xl">
+              <button className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
                 Unlock Files
               </button>
             </form>
           </div>
         ) : (
           <div className="p-8">
+
             {/* Header */}
             <div className="flex justify-between mb-8">
               <div>
@@ -87,7 +101,7 @@ const CheckInfo = () => {
 
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded"
+                className="bg-red-500 hover:bg-red-600 transition text-white px-4 py-2 rounded"
               >
                 Logout
               </button>
@@ -105,7 +119,8 @@ const CheckInfo = () => {
                   </div>
 
                   <h3 className="font-bold text-slate-700 mb-1">{doc.label}</h3>
-                  <p className="text-xs text-slate-400 mb-6 uppercase tracking-tighter">
+
+                  <p className="text-xs text-slate-400 mb-6 uppercase">
                     Official PDF Document
                   </p>
 
@@ -136,17 +151,16 @@ const CheckInfo = () => {
             {/* PDF Viewer */}
             {selectedFile && (
               <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 p-4 md:p-10 flex flex-col">
-                {" "}
+
                 <div className="flex justify-end mb-4">
-                  {" "}
                   <button
                     onClick={() => setSelectedFile(null)}
                     className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-full font-bold transition"
                   >
-                    {" "}
-                    Close Preview{" "}
-                  </button>{" "}
-                </div>{" "}
+                    Close Preview
+                  </button>
+                </div>
+
                 <div className="flex-grow bg-white rounded-2xl overflow-hidden h-[80vh]">
                   <iframe
                     src={selectedFile}
@@ -154,10 +168,13 @@ const CheckInfo = () => {
                     title="PDF Preview"
                   />
                 </div>
+
               </div>
             )}
+
           </div>
         )}
+
       </div>
     </section>
   );
